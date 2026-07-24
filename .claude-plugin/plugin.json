@@ -1,5 +1,5 @@
 {
-  "name": "bopomofo-input-recovery",
+  "name": "bopomofo-rescue",
   "description": "把忘記切輸入法、用注音鍵盤打出來的英數亂碼(su3cl3a8)還原成中文(你好嗎)。內含 UserPromptSubmit hook,送出訊息當下就自動解碼。",
   "version": "1.0.0",
   "hooks": "./hooks/hooks.json"

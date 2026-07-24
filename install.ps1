@@ -1,10 +1,10 @@
 ﻿<#
 .SYNOPSIS
-  把 bopomofo-input-recovery 這個 skill 安裝 / 同步到一個 Claude Code 專案。
+  把 bopomofo-rescue 這個 skill 安裝 / 同步到一個 Claude Code 專案。
 
 .DESCRIPTION
   本 repo 是這個 skill 的「正式源頭」。此腳本會把技能檔鏡像複製到
-  <Target>\.claude\skills\bopomofo-input-recovery(單向:源頭 -> 專案)。
+  <Target>\.claude\skills\bopomofo-rescue(單向:源頭 -> 專案)。
   每次更新本 repo 後,重跑一次就能把目標專案同步到最新。
   注意:這是「鏡像」,會先清掉目標的舊技能資料夾再整包覆蓋,
   目標端對這個技能的本地改動會被蓋掉(源頭才是唯一真相)。
@@ -35,7 +35,7 @@ if (-not (Test-Path $Target)) {
 }
 
 $src  = $PSScriptRoot
-$dest = Join-Path $Target '.claude\skills\bopomofo-input-recovery'
+$dest = Join-Path $Target '.claude\skills\bopomofo-rescue'
 
 # 先清掉舊的技能資料夾再整包覆蓋 -> 乾淨鏡像、可重複執行不殘留
 if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
@@ -57,7 +57,7 @@ foreach ($item in $items) {
 # 清掉可能被一併複製過去的 Python 快取
 Remove-Item -Recurse -Force (Join-Path $dest 'scripts\__pycache__') -ErrorAction SilentlyContinue
 
-Write-Host "OK  bopomofo-input-recovery 已同步 -> $dest"
+Write-Host "OK  bopomofo-rescue 已同步 -> $dest"
 Write-Host "    (若目標是 git 專案,記得去該專案 review 並 commit 這次變更)"
 
 # ---------------------------------------------------------------------------

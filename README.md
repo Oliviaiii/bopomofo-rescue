@@ -1,4 +1,4 @@
-# bopomofo-input-recovery
+# bopomofo-rescue
 
 把「忘記切輸入法、用注音鍵盤打出來的英數亂碼」自動還原成中文的 Claude Code skill。
 
@@ -23,21 +23,17 @@ a86z06 你了，幫我看一下 login.py    →  麻煩 你了，幫我看一下
 把整個資料夾放進你的個人 skills 目錄，就這樣：
 
 ```bash
-git clone https://github.com/Oliviaiii/bopomofo-rescue.git ~/.claude/skills/bopomofo-input-recovery
+git clone https://github.com/Oliviaiii/bopomofo-rescue.git ~/.claude/skills/bopomofo-rescue
 ```
 
 Windows PowerShell：
 
 ```powershell
-git clone https://github.com/Oliviaiii/bopomofo-rescue.git "$env:USERPROFILE\.claude\skills\bopomofo-input-recovery"
+git clone https://github.com/Oliviaiii/bopomofo-rescue.git "$env:USERPROFILE\.claude\skills\bopomofo-rescue"
 ```
 
 **重開 Claude Code**，然後直接打 `su3cl3a8` 試試看。
 
-> 上面指令最後那段 `bopomofo-input-recovery` 是**資料夾名稱**，請照抄 —— Claude Code
-> 用資料夾名稱決定 skill 的名字。repo 叫 `bopomofo-rescue`、skill 叫
-> `bopomofo-input-recovery`，兩者不同是正常的。
->
 > 第一次建立 `~/.claude/skills/` 這個目錄時一定要重開 Claude Code，之後修改才會即時生效。
 
 ### 需要什麼
@@ -198,7 +194,7 @@ Layer C 用一元語言模型加逐詞懲罰（`Σ log(freq) − k·log(total)`�
 ## 檔案結構
 
 ```
-bopomofo-input-recovery/
+bopomofo-rescue/
 ├── SKILL.md                  # 觸發條件 + 給 AI 的行為指示
 ├── .claude-plugin/
 │   └── plugin.json           # 讓它同時是 plugin，才能自動掛 hook

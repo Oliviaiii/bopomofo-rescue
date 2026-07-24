@@ -1,5 +1,5 @@
 ---
-name: bopomofo-input-recovery
+name: bopomofo-rescue
 description: >-
   Detect and recover text that was accidentally typed with the Taiwanese
   Bopomofo (注音) keyboard while the input method was stuck in English/ASCII

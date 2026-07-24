@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-  檢查 bopomofo-input-recovery 的 UserPromptSubmit hook 是不是還活著。
+  檢查 bopomofo-rescue 的 UserPromptSubmit hook 是不是還活著。
 
 .DESCRIPTION
   hooks\bopomofo_hook.py 刻意設計成「永遠 exit 0、失敗完全靜默」——
@@ -72,7 +72,7 @@ function Invoke-Hook {
 }
 
 Write-Host ""
-Write-Host "bopomofo-input-recovery hook 健檢" -ForegroundColor Cyan
+Write-Host "bopomofo-rescue hook 健檢" -ForegroundColor Cyan
 Write-Host "設定檔: $SettingsPath"
 Write-Host ("-" * 60)
 
