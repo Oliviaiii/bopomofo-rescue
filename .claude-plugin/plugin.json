@@ -1,6 +1,26 @@
 {
   "name": "bopomofo-rescue",
-  "description": "把忘記切輸入法、用注音鍵盤打出來的英數亂碼(su3cl3a8)還原成中文(你好嗎)。內含 UserPromptSubmit hook,送出訊息當下就自動解碼。",
+  "description": "把忘記切輸入法、用注音鍵盤打出來的英數亂碼(su3cl3a8)還原成中文(你好嗎)。內含 UserPromptSubmit hook,送出訊息當下就自動解碼。Bopomofo / Zhuyin IME typo decoder — recovers garbled ASCII typed on a Taiwanese 注音 keyboard back into Traditional Chinese, with zero commands.",
   "version": "1.0.0",
+  "author": {
+    "name": "Oliviaiii",
+    "url": "https://github.com/Oliviaiii"
+  },
+  "homepage": "https://github.com/Oliviaiii/bopomofo-rescue",
+  "repository": "https://github.com/Oliviaiii/bopomofo-rescue",
+  "license": "MIT",
+  "keywords": [
+    "bopomofo",
+    "zhuyin",
+    "注音",
+    "注音亂碼",
+    "ime",
+    "input-method",
+    "typo",
+    "garbled-text",
+    "decoder",
+    "traditional-chinese",
+    "taiwan"
+  ],
   "hooks": "./hooks/hooks.json"
 }

@@ -6,15 +6,15 @@
 
 把「忘記切輸入法、用注音鍵盤打出來的英數亂碼」自動還原成中文的 Claude Code skill。
 
-<details>
-<summary><b>English</b> — what is this?</summary>
+輸入法忘了切，`su3cl3a8` 就是「你好嗎」—— 這個 skill 讓 AI 直接看懂，你不用重打。
 
-Taiwanese developers type Chinese with a **Bopomofo (注音) keyboard**. When the input
-method is still stuck in English mode, the intended Chinese comes out as meaningless
+**English** — Taiwanese developers type Chinese on a **Bopomofo / Zhuyin (注音) keyboard**.
+When the IME is still stuck in English mode, the intended Chinese comes out as meaningless
 ASCII — typing 你好嗎 produces `su3cl3a8`, because those are the literal keys.
 
-**bopomofo-rescue** is a Claude Code skill that decodes those keystrokes back into
-Chinese, so your AI agent understands you without you retyping anything:
+**bopomofo-rescue** is a zero-command Claude Code skill that decodes this garbled input —
+Bopomofo IME typo recovery — back into Traditional Chinese, so your AI agent understands you
+without you retyping anything:
 
 ```
 這個 PR dk3u3 merge 了嗎   →   這個 PR 可以 merge 了嗎
@@ -28,9 +28,9 @@ Chinese, so your AI agent understands you without you retyping anything:
 - **Real dictionary** — IME-style max-probability segmentation over libtabe word
   frequencies, not guesswork.
 
-See [Installation](#安裝) below (the guide is in Traditional Chinese, matching its users).
+Installation and the full guide are in Traditional Chinese below, matching its users.
 
-</details>
+---
 
 實際情況通常不是整句亂碼，而是**一句話裡有一半忘了切**：
 
@@ -46,7 +46,7 @@ a86z06 你了，幫我看一下 login.py    →  麻煩 你了，幫我看一下
 
 給每個都會忘記切輸入法的台灣工程師。
 
-![bopomofo-rescue 精準還原示範](assets/demo.gif)
+![bopomofo-rescue 注音亂碼精準還原示範 — decoding Bopomofo/Zhuyin keystrokes typed in English IME mode back into Traditional Chinese](assets/demo.gif)
 
 ---
 
@@ -265,6 +265,60 @@ bopomofo-rescue/
 - **中英之間沒有空白時可能會漏**。以整個 token 判斷，所以 `git a8`（有空白）還得出
   「git 嗎」，但 `gita8`（黏在一起）整段都會被放過 —— 因為 `gita8` 硬解出來是
   ㄕㄛㄔㄇㄚ 這種無意義的音，程式寧可放過也不亂猜。
+
+---
+
+## 常見問題
+
+**什麼是注音亂碼？**
+用注音鍵盤打中文時，輸入法還停在英文模式，打出來的就不是中文，而是那些注音符號在
+鍵盤上對應的英文字母和數字。想打「你好嗎」會變成 `su3cl3a8`，因為 ㄋ 在 `s`、ㄧ 在 `u`、
+ˇ 在 `3`，以此類推。也有人叫它注音文、輸入法亂碼、沒切輸入法。
+
+**`su3cl3a8` 是什麼意思？**
+「你好嗎」。`su3` = ㄋㄧˇ = 你，`cl3` = ㄏㄠˇ = 好，`a8` = ㄇㄚ = 嗎。
+
+**怎麼把注音亂碼還原成中文？**
+按鍵→注音是純查表、100% 確定；注音→中文才需要猜。這個 skill 把兩段拆開：程式負責
+還原讀音，選字交給看得到上下文的 AI。所以 `2/3` 一定是 ㄉㄥˇ，但要選「等」還是「戥」，
+由 AI 依語境決定。細節見 [運作原理](#運作原理)。
+
+**How do I decode Bopomofo typed while the IME was in English mode?**
+Map each key back through the standard (Dachen) Zhuyin keyboard layout, segment the result
+into valid Mandarin syllables, then pick characters by context. This skill does the first two
+steps deterministically in Python and leaves character selection to the LLM — that split is
+what makes it safe to run on every message.
+
+**跟線上注音解碼器有什麼不一樣？**
+線上工具要你先發現自己打錯、複製、貼上、再貼回來。這個是 hook，在你送出訊息的當下就
+解碼完了，AI 第一眼就看得懂 —— 你完全不會意識到它存在。
+
+**它會不會把我的程式碼也翻成中文？**
+不會，這是設計上最花力氣的地方。三道防線加 27 項專門的誤判測試，見
+[它不會亂翻你的程式碼](#它不會亂翻你的程式碼)。
+
+**支援哪些鍵盤配置？**
+目前只有**大千式（標準）注音鍵盤**。倚天、許氏、無蝦米等需另建對照表 ——
+歡迎開 Issue 或送 PR。
+
+---
+
+## 相關專案
+
+同樣在處理注音亂碼，但形式不同，可以依需求挑：
+
+| 專案 | 形式 |
+|---|---|
+| [uegajde/Bopomofo_translator](https://github.com/uegajde/Bopomofo_translator) | 網頁，亂碼還原成注音符號 |
+| [zrtian0819/Mistcoding](https://github.com/zrtian0819/Mistcoding) | 網頁，亂碼文編譯器 |
+| [yian524/bpmf-decoder](https://github.com/yian524/bpmf-decoder) | Windows 快捷鍵，反白就還原 |
+| [winterdrive/migao](https://github.com/winterdrive/migao) | 翻譯米糕，IME 錯誤快速復原 |
+| [x43x61x69/Zhuyin-Typo](https://github.com/x43x61x69/Zhuyin-Typo) | 函式庫，英文字串轉回注音 |
+| [timdream/jszhuyin](https://github.com/timdream/jszhuyin) | JS 注音輸入法，自動選字 |
+| [chewing/libchewing](https://github.com/chewing/libchewing) | 酷音輸入法核心引擎 |
+
+**bopomofo-rescue 的差別**：它不是給人用的工具，是給 AI agent 用的 skill ——
+沒有介面、沒有指令、不用複製貼上，裝好之後在你跟 AI 對話的過程中自動生效。
 
 ---
 
