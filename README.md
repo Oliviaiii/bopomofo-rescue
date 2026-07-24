@@ -46,8 +46,7 @@ a86z06 你了，幫我看一下 login.py    →  麻煩 你了，幫我看一下
 
 給每個都會忘記切輸入法的台灣工程師。
 
-<!-- 圖片放進 assets/ 之後，把下面這行的註解拿掉即可 -->
-<!-- ![demo](assets/demo.gif) -->
+![bopomofo-rescue 精準還原示範](assets/demo.gif)
 
 ---
 
