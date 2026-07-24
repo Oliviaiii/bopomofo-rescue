@@ -1,0 +1,2 @@
+# 一律以 LF 存進 repo 並簽出(跨平台一致;Python / TSV / MD 尤其重要)
+* text=auto eol=lf

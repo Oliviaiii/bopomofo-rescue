@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# 本機 hook 測試設定（含各人不同的絕對路徑，不進版控）
+.claude/settings.local.json

@@ -1,0 +1,108 @@
+# 注音鍵盤誤打還原 — 測試案例
+# 欄位（以 tab 分隔）: kind <TAB> input <TAB> expect_bopomofo <TAB> expect_chinese <TAB> note
+#   kind = pos  -> 應偵測到候選(medium/high)
+#                  expect_bopomofo 需出現在候選注音中（"-" 表示不檢查）
+#                  expect_chinese  需出現在候選中文中（"-" 表示不檢查，需詞典）
+#   kind = neg  -> 不應有任何 medium/high 候選（技術字串/英文），兩個 expect 皆填 "-"
+#   kind = rep  -> 音節切得出但詞典還不出中文，應由「相鄰兩鍵對調」補救。
+#                  expect_bopomofo 同 pos 規則；expect_chinese 需為某個 repair
+#                  建議 chinese 的**子字串**（因為 repair 還的是整段、非單字）
+#
+# 注意：neg 案例除了不可有候選，也不可產生 repair 建議（見 run_tests 的額外檢查）
+#
+# === 正例：常見中文誤打（注音 + 中文都檢查）===
+pos	su3cl3a8	ㄋㄧˇㄏㄠˇㄇㄚ	你好嗎	你好嗎
+pos	su3cl3	ㄋㄧˇㄏㄠˇ	你好	你好
+pos	g42k7	ㄕˋㄉㄜ˙	是的	是的
+pos	cl32k7	ㄏㄠˇㄉㄜ˙	好的	好的
+pos	dj94	ㄎㄨㄞˋ	快	快
+pos	vu,4vu,4	ㄒㄧㄝˋㄒㄧㄝˋ	謝謝	謝謝
+pos	ji3	ㄨㄛˇ	我	我
+pos	gk6ak7	ㄕㄜˊㄇㄜ˙	什麼	什麼
+pos	jp4wu6	ㄨㄣˋㄊㄧˊ	問題	問題
+pos	a8a8	ㄇㄚㄇㄚ	媽媽	媽媽（一聲，無聲調鍵）
+#
+# === 正例：較長/較難的詞（只檢查中文）===
+pos	vu,4vu,4su3	-	謝謝你	三字
+pos	ao6jp4wu6	-	沒問題	三字
+pos	1;ji3d04uvu84	-	幫我看一下	五字、混合聲調
+pos	rupwu0	-	今天	一聲詞
+pos	2u04sl3	-	電腦	常見詞
+#
+# === 正例：混在句子裡（只還原誤打片段）===
+pos	幫我看看這個PR su3cl3a8 然後修bug	ㄋㄧˇㄏㄠˇㄇㄚ	你好嗎	PR/bug 不動
+pos	cl32k7 麻煩了	ㄏㄠˇㄉㄜ˙	好的	好的 + 既有中文
+pos	修一下 g42k7 問題	ㄕˋㄉㄜ˙	是的	是的
+#
+# === 正例：尾隨標點不可被吃成音節（回歸：Codex P2 #96）===
+pos	su3cl3a8,	ㄋㄧˇㄏㄠˇㄇㄚ	你好嗎	尾逗號應當後綴保留、非 ㄝ
+pos	cl3.	ㄏㄠˇ	好	尾句點應當後綴保留、非 ㄡ
+pos	su3cl3a8!	ㄋㄧˇㄏㄠˇㄇㄚ	你好嗎	尾驚嘆號不可致整段被排除
+pos	g42k7。	ㄕˋㄉㄜ˙	是的	全形句號原本已處理，補測
+#
+# === 正例：注音「.＋聲調」(ㄡ鍵)不可被當副檔名排除（回歸：Codex P2 #96 二輪）===
+pos	qk4ru.6	ㄆㄜˋㄐㄧㄡˊ	-	SKILL 觸發範例;.6 = ㄡ+二聲、非 .ext
+#
+# === 正例：中文與誤打黏在一起、沒有空白（回歸：Codex P2 #96 三輪）===
+pos	幫我修一下su3cl3a8	ㄋㄧˇㄏㄠˇㄇㄚ	你好嗎	中文黏 ASCII、無空白也要抓出
+pos	看看這個su3cl3a8然後修bug	ㄋㄧˇㄏㄠˇㄇㄚ	你好嗎	夾在中文中間;bug 不動
+#
+# === repair：相鄰兩鍵對調的快打手誤（「說」ㄕㄨㄛ 應打 gji，打成 jgi）===
+rep	2l4ji3y94jgi	-	說	單一 token;切得出 ['ㄨ','ㄕㄛ'] 但詞典查無
+rep	su352l4ji3y94jgigp6ak7a8	-	說	黏成 24 字元整句,仍應建議出「說」
+rep	su35 2l4ji3y94jgi gp6ak7a8	-	說	原始重現案例(空白分隔)
+#
+# === repair:整段切不出音節,靠轉置才救得回來(「嗎」ㄇㄚ 應打 a8,打成 8a)===
+rep	gp6ak78a	-	什麼嗎	整段無法 segment,舊版連候選都不產生
+rep	su3d042k72j/3ji3y94gji gp6ak78a ?	-	什麼嗎	完整重現句;尾隨 ? 不可影響判定
+#
+# === 反例:放寬「切不出音節也試轉置」後的回歸守門 ===
+# 轉置後若只是一串單字串接(k8s -> 額哪)就不算數,必須含至少一個多字詞
+neg	k8s	-	-	轉置後為「額哪」單字串接,不得成為候選
+neg	iso8601	-	-	轉置後為單字串接,不得成為候選
+neg	test123	-	-	英數混合,轉置後仍還不出詞
+neg	err404	-	-	英數混合,轉置後仍還不出詞
+#
+# === 反例：常見開發/英文字串，絕不可觸發 ===
+neg	npm	-	-	套件管理器
+neg	git	-	-	版本控制
+neg	http	-	-	協定
+neg	html	-	-	純字母能硬切但無數字 -> low
+neg	css	-	-	樣式
+neg	run	-	-	英文動詞
+neg	npm run dev	-	-	整句指令
+neg	git commit -m fix	-	-	含 flag
+neg	./src/app.py	-	-	路徑
+neg	C:\Users\me	-	-	Windows 路徑
+neg	--verbose	-	-	CLI flag
+neg	-rf	-	-	短 flag
+neg	2024.1	-	-	版本號
+neg	issue721	-	-	含數字但切不出音節
+neg	GitHub	-	-	含大寫
+neg	utf8	-	-	編碼名（denylist）
+neg	utf-8	-	-	含連字號
+neg	x86	-	-	架構名（denylist）
+neg	mp3	-	-	副檔名（denylist）
+neg	p95	-	-	延遲指標（denylist）
+neg	sha256	-	-	雜湊（切不出音節）
+neg	base64	-	-	編碼（切不出音節）
+neg	SELECT * FROM users	-	-	SQL
+neg	user@host.com	-	-	含 @
+neg	const x = 1	-	-	程式碼
+neg	background-color: red	-	-	CSS
+neg	abc123	-	-	英數混合、切不出音節
+#
+# === 反例：執行檔/套件 + 版本號，絕不可觸發（回歸：Codex P2 #96 二輪）===
+neg	python3	-	-	≥3音節但單一數字 -> 結構化規則壓 low
+neg	jdk8	-	-	≥3音節但單一數字 -> 結構化規則壓 low
+neg	py3	-	-	2音節短款 -> denylist
+neg	php7	-	-	2音節短款 -> denylist
+neg	vue3	-	-	2音節短款 -> denylist
+neg	node	-	-	無數字版本詞、本就 low
+neg	config.py	-	-	真檔名(.py 字母開頭)仍要排除,守 _RE_FILENAME 收緊
+neg	run python3 -m pip install	-	-	整句 CLI 指令不可被還原
+#
+# === 反例：git commit hash，絕不可觸發（回歸：Codex P2 #96 三輪）===
+neg	55a9d0096c87	-	-	12 碼小寫 hex commit hash
+neg	deadbeef	-	-	8 碼 hex
+neg	Please review 55a9d0096c87	-	-	整句含 hash 不可被還原
