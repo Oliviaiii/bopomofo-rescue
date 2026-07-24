@@ -1,6 +1,36 @@
 # bopomofo-rescue
 
+[![tests](https://github.com/Oliviaiii/bopomofo-rescue/actions/workflows/tests.yml/badge.svg)](https://github.com/Oliviaiii/bopomofo-rescue/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-8A63D2)](https://code.claude.com/docs/en/skills)
+
 把「忘記切輸入法、用注音鍵盤打出來的英數亂碼」自動還原成中文的 Claude Code skill。
+
+<details>
+<summary><b>English</b> — what is this?</summary>
+
+Taiwanese developers type Chinese with a **Bopomofo (注音) keyboard**. When the input
+method is still stuck in English mode, the intended Chinese comes out as meaningless
+ASCII — typing 你好嗎 produces `su3cl3a8`, because those are the literal keys.
+
+**bopomofo-rescue** is a Claude Code skill that decodes those keystrokes back into
+Chinese, so your AI agent understands you without you retyping anything:
+
+```
+這個 PR dk3u3 merge 了嗎   →   這個 PR 可以 merge 了嗎
+```
+
+- **Zero-command** — install into `~/.claude/skills/` and it works automatically via a
+  bundled `UserPromptSubmit` hook. No prefix, no slash command.
+- **Won't touch your code** — `npm`, `git`, commit hashes, file paths and CLI flags are
+  filtered out by exclusion rules, syllable validation and confidence tiers.
+  27 of the 72 tests exist purely to guard against false positives.
+- **Real dictionary** — IME-style max-probability segmentation over libtabe word
+  frequencies, not guesswork.
+
+See [Installation](#安裝) below (the guide is in Traditional Chinese, matching its users).
+
+</details>
 
 實際情況通常不是整句亂碼，而是**一句話裡有一半忘了切**：
 
@@ -15,6 +45,9 @@ a86z06 你了，幫我看一下 login.py    →  麻煩 你了，幫我看一下
 **裝好之後不用打任何指令**：你送出訊息的當下就完成解碼，AI 第一眼就看得懂。
 
 給每個都會忘記切輸入法的台灣工程師。
+
+<!-- 圖片放進 assets/ 之後，把下面這行的註解拿掉即可 -->
+<!-- ![demo](assets/demo.gif) -->
 
 ---
 

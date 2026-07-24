@@ -1,5 +1,8 @@
 # 資料來源與授權（Dictionary Data Attribution）
 
+> 本專案本體採 MIT License（見根目錄 [LICENSE](../LICENSE)）。
+> 本檔案說明的是**內建字典資料**的第三方授權，兩者並存且相容。
+
 `bopomofo_dict.tsv` 是由 **libtabe** 的 `tsi.src` 詞頻／注音資料處理而來
 （`scripts/build_dict.py`），保留了詞、頻率與注音讀音。
 
