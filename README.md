@@ -23,17 +23,21 @@ a86z06 你了，幫我看一下 login.py    →  麻煩 你了，幫我看一下
 把整個資料夾放進你的個人 skills 目錄，就這樣：
 
 ```bash
-git clone https://github.com/Oliviaiii/bopomofo-input-recovery.git ~/.claude/skills/bopomofo-input-recovery
+git clone https://github.com/Oliviaiii/bopomofo-rescue.git ~/.claude/skills/bopomofo-input-recovery
 ```
 
 Windows PowerShell：
 
 ```powershell
-git clone https://github.com/Oliviaiii/bopomofo-input-recovery.git "$env:USERPROFILE\.claude\skills\bopomofo-input-recovery"
+git clone https://github.com/Oliviaiii/bopomofo-rescue.git "$env:USERPROFILE\.claude\skills\bopomofo-input-recovery"
 ```
 
 **重開 Claude Code**，然後直接打 `su3cl3a8` 試試看。
 
+> 上面指令最後那段 `bopomofo-input-recovery` 是**資料夾名稱**，請照抄 —— Claude Code
+> 用資料夾名稱決定 skill 的名字。repo 叫 `bopomofo-rescue`、skill 叫
+> `bopomofo-input-recovery`，兩者不同是正常的。
+>
 > 第一次建立 `~/.claude/skills/` 這個目錄時一定要重開 Claude Code，之後修改才會即時生效。
 
 ### 需要什麼
@@ -217,7 +221,10 @@ bopomofo-input-recovery/
 
 ## 授權與資料來源
 
-字典由 **libtabe** 的 `tsi.src`（BSD 授權，經 libchewing 散布）處理而來，
+本專案採 **MIT License**（見 [LICENSE](LICENSE)）—— 隨意使用、修改、散布，
+只要保留版權聲明即可。
+
+內建字典由 **libtabe** 的 `tsi.src`（BSD 授權，經 libchewing 散布）處理而來，
 詳見 [data/NOTICE.md](data/NOTICE.md)。重新散布時請一併保留該 NOTICE。
 
 ---
@@ -230,3 +237,14 @@ bopomofo-input-recovery/
 - **中英之間沒有空白時可能會漏**。以整個 token 判斷，所以 `git a8`（有空白）還得出
   「git 嗎」，但 `gita8`（黏在一起）整段都會被放過 —— 因為 `gita8` 硬解出來是
   ㄕㄛㄔㄇㄚ 這種無意義的音，程式寧可放過也不亂猜。
+
+---
+
+## 作者
+
+**[@Oliviaiii](https://github.com/Oliviaiii)**
+
+問題與建議歡迎開 [Issue](https://github.com/Oliviaiii/bopomofo-rescue/issues)；
+其他合作或工作機會洽談，來信：**rainy57091224@gmail.com**
+
+如果這個工具幫你省下了重打的麻煩，給顆 ⭐ 是最好的回饋。
