@@ -2,8 +2,9 @@
 name: bopomofo-rescue
 description: >-
   Detect and recover text that was accidentally typed with the Taiwanese
-  Bopomofo (注音) keyboard while the input method was stuck in English/ASCII
-  mode, producing meaningless-looking letter+digit sequences such as
+  Bopomofo / Zhuyin (注音) keyboard while the input method (IME) was stuck in
+  English/ASCII mode — what Taiwanese users call 注音亂碼 or 注音文 —
+  producing meaningless-looking letter+digit sequences such as
   "su3cl3a8", "cl3", "g4", "2k7", "vu,4", or such garbled runs embedded in an
   otherwise normal request (e.g. "help me fix su3cl3a8", "看看這個 PR qk4ru.6",
   "幫我改 su3cl3a8xk7"). Use this skill whenever a user message contains short
